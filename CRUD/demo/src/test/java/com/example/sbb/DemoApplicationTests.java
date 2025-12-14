@@ -1,17 +1,12 @@
 package com.example.sbb;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.sbb.answer.Answer;
 import com.example.sbb.answer.AnswerRepository;
-import com.example.sbb.question.Question;
 import com.example.sbb.question.QuestionRepository;
+import com.example.sbb.question.QuestionService;
 
 @SpringBootTest
 class DemoApplicationTests {
@@ -24,21 +19,20 @@ class DemoApplicationTests {
 	@Autowired
 	private AnswerRepository answerRepository;
 
+	@Autowired
+	private QuestionService questionService;
+
 	@Test
 	void contextLoads() {
 	}
 
     @Test
     void testJpa() {
-		Optional<Question> oq = this.questionRepository.findById(2);
-		assertTrue(oq.isPresent());
-		Question q = oq.get();
-
-		Answer a = new Answer();
-		a.setContent("네 자동으로 생성됩니다.");
-		a.setQuestion(q);
-		a.setCreateDate(java.time.LocalDateTime.now());
-		this.answerRepository.save(a);
+		for(int i = 1; i <= 100; i++) {
+			String subject = String.format("더미 데이터");
+			String content = String.format("냉무");
+			this.questionService.create(subject, content);
+		}
 
     }
 
