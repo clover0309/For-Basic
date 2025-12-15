@@ -31,7 +31,7 @@ class DemoApplicationTests {
 		for(int i = 1; i <= 100; i++) {
 			String subject = String.format("더미 데이터");
 			String content = String.format("냉무");
-			this.questionService.create(subject, content);
+			this.questionService.create(subject, content, null);
 		}
 
     }

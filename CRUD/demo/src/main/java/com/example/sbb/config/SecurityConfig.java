@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,6 +15,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration //Config로 사용하기 위한 어노테이션
 @EnableWebSecurity // Spring Security 활성화 어노테이션.
+@EnableMethodSecurity(prePostEnabled = true) // PreAuthorize 어노테이션을 이용하기 위한 설정.
 public class SecurityConfig {
 
     //의존성 주입을 위한 @Bean 어노테이션 선언.
