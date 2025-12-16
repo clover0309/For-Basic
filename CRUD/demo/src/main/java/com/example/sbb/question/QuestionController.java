@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.sbb.answer.Answer;
 import com.example.sbb.answer.AnswerForm;
 import com.example.sbb.user.SiteUser;
 import com.example.sbb.user.UserService;
@@ -38,10 +37,12 @@ public class QuestionController {
     }
     @GetMapping("list")
     // 페이지네이션을 추가하였으므로, 페이지네이션을 사용하기 위해, @RequestParam을 통해, page의 수를 받아옴.
-    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page,
+                        @RequestParam(value = "kw", defaultValue = "") String kw) {
         //QuestionService에 구현해둔 Page형태의 getList를 사용함.
-        Page<Question> paging = this.questionService.getList(page);
+        Page<Question> paging = this.questionService.getList(page, kw);
         model.addAttribute("paging", paging);
+        model.addAttribute("kw", kw);
         return "question_list";
     }
 
@@ -102,4 +103,12 @@ public class QuestionController {
         return String.format("redirect:/question/detail/%s", id);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/vote/{id}")
+    public String questionVote(Principal principal, @PathVariable("id") Integer id) {
+        Question question = this.questionService.getQuestion(id);
+        SiteUser siteUser = this.userService.getUser(principal.getName());
+        this.questionService.vote(question, siteUser);
+        return String.format("redirect:/question/detail/%s", id);
+    }
 }
